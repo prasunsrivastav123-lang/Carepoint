@@ -14,7 +14,10 @@ router.get("/", async (_req, res, next) => {
 // GET /api/doctors/:id
 router.get("/:id", async (req, res, next) => {
   try {
-    const doctor = await Doctor.findById(req.params.id);
+    const doctor = await Doctor.findOne({
+  _id: req.params.id,
+  isActive: true,
+});
     if (!doctor) return res.status(404).json({ message: "Doctor not found" });
     res.json(doctor);
   } catch (err) { next(err); }
@@ -40,7 +43,17 @@ router.patch("/:id", async (req, res, next) => {
 // DELETE /api/doctors/:id  (soft delete)
 router.delete("/:id", async (req, res, next) => {
   try {
-    await Doctor.findByIdAndUpdate(req.params.id, { isActive: false });
+   const doctor = await Doctor.findByIdAndUpdate(
+  req.params.id,
+  { isActive: false },
+  { new: true }
+);
+
+if (!doctor) {
+  return res.status(404).json({
+    message: "Doctor not found",
+  });
+}
     res.json({ message: "Doctor deactivated" });
   } catch (err) { next(err); }
 });

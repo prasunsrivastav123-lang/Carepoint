@@ -2,11 +2,14 @@ import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-
+import doctorRoutes from "./routes/doctors.js";
 import authRoutes from "./routes/auth.js";
-
+import patientRoutes from "./routes/patients.js";
+import appointmentRoutes from "./routes/appointments.js";
+import dashboardRoutes from "./routes/dashboard.js";
 import { errorHandler } from "./middleware/errorHandler.js";
 
+//console.log("Dashboard import =", dashboardRoutes);
 dotenv.config();
 
 const app = express();
@@ -41,10 +44,18 @@ app.get("/api/health", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/doctors", doctorRoutes);
+app.use("/api/patients", patientRoutes);
+app.use("/api/appointments", appointmentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 
 // Future Routes
 // app.use("/api/appointments", authMiddleware, appointmentRoutes);
-// app.use("/api/doctors", authMiddleware, doctorRoutes);
+// app.use("/api/patients", authMiddleware, patientRoutes);
+// app.use("/api/whatsapp", whatsappRoutes);
+// Future Routes
+// app.use("/api/appointments", authMiddleware, appointmentRoutes);
+ //app.use("/api/doctors", authMiddleware, doctorRoutes);
 // app.use("/api/patients", authMiddleware, patientRoutes);
 // app.use("/api/whatsapp", whatsappRoutes);
 
